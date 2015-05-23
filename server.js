@@ -8,7 +8,7 @@ var libPath = './';
 
 console.log("starting server...");
 
-http.createServer(function (req, res) {
+var server = http.createServer(function (req, res) {
     var q = url.parse(req.url, true).query;
     var fileRequest = req.url.match(/\/(.*\.json$)/);
 
@@ -27,11 +27,14 @@ http.createServer(function (req, res) {
             res.end(fs.readFileSync(libPath + fileName));
         }
         catch (e) {
-            console.log(e);
+            res.writeHead(404, {'Content-Type': 'text/html'});
+            res.end(fileName + ": file not found");
+            return
         }
+
     }
     else {
         res.writeHead(200, {'Content-Type': 'text/html'});
-        res.end(fs.readFileSync('./index.html'));
+        res.end(req.url + " isn't a json file :(");
     }
 }).listen(3000);
