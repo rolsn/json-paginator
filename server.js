@@ -1,13 +1,22 @@
+// imports
 var http = require('http');
 var fs = require('fs');
 var url = require('url');
 
+// script options
+var libPath = './';
+
+console.log("starting server...");
+
 http.createServer(function (req, res) {
-    var libPath = 'public/lib/';
     var q = url.parse(req.url, true).query;
-    var fileRequest = req.url.match(/\/(.*\.js)/);
+    var fileRequest = req.url.match(/\/(.*\.json$)/);
 
     console.log("request: url %s, page # %s", req.url, q.page);
+
+    /*
+     * remember: fileRequest is false if it doesn't match the json regex
+     */
 
     if (fileRequest) {
         var fileName = fileRequest[1];
@@ -21,32 +30,8 @@ http.createServer(function (req, res) {
             console.log(e);
         }
     }
-
-    // the whole db
-    if (req.url == '/books') {
-        res.writeHead(200, {'Content-Type': 'application/json'});
-        res.end(fs.readFileSync('./public/db.json'));
-    }
-
-    // specific page numbers (with 4 being a 404) and index.html otherwise
-    if (q.page == '1') {
-        res.writeHead(200, {'Content-Type': 'application/json'});
-        res.end(fs.readFileSync('./public/p1.js'));
-    }
-    else if (q.page == '2') {
-        res.writeHead(200, {'Content-Type': 'application/json'});
-        res.end(fs.readFileSync('./public/p2.js'));
-    }
-    else if (q.page == '3') {
-        res.writeHead(200, {'Content-Type': 'application/json'});
-        res.end(fs.readFileSync('./public/p3.js'));
-    }
-    else if (q.page == '4') {
-        res.writeHead(404, {'Content-Type': 'text/html'});
-        res.end("404 :(");
-    }
     else {
         res.writeHead(200, {'Content-Type': 'text/html'});
-        res.end(fs.readFileSync('./public/index.html'));
+        res.end(fs.readFileSync('./index.html'));
     }
 }).listen(3000);
