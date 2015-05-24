@@ -18,7 +18,7 @@ var server = http.createServer(function (req, res) {
     var q = url.parse(req.url, true).query;
     var fileRequest = req.url.match(/\/(.*\.json)/);
 
-    console.log("request: url %s, page # %s", req.url, q.page);
+    console.log("request: url %s", req.url);
 
     if (fileRequest) {
         var fileName = fileRequest[1];
@@ -49,9 +49,7 @@ var server = http.createServer(function (req, res) {
         if (params.indexOf(queryParams.page) > -1) requestedPage = parseInt(q[queryParams.page])
         if (params.indexOf(queryParams.pageSize) > -1) pageSize = parseInt(q[queryParams.pageSize])
 
-        var fullPages = Math.floor(totalResults/pageSize);
         if (fullPages >= 1) {
-            var remainder = totalResults % (fullPages * pageSize);
             var offset = pageSize * (requestedPage - 1);
             var result = json.slice(offset, offset + pageSize);
 
