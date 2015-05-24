@@ -5,12 +5,15 @@ var url = require('url');
 
 // script options
 var libPath = './';
+var port = 3000;
 var queryParams = {
         page: 'page',
         pageSize: 'count'
 };
-var requestedPage = 1;
-var pageSize = 10;
+var defaults = {
+        reqPage: 1,
+        pageSize: 10
+};
 
 console.log("starting server...");
 
@@ -46,11 +49,12 @@ var server = http.createServer(function (req, res) {
         var json = JSON.parse(fileBody);
         var totalResults = json.length;
 
-        if (params.indexOf(queryParams.page) > -1) requestedPage = parseInt(q[queryParams.page])
-        if (params.indexOf(queryParams.pageSize) > -1) pageSize = parseInt(q[queryParams.pageSize])
+        var reqPage = params.indexOf(queryParams.page) > -1 ? parseInt(q[queryParams.page]) : defaults.reqPage;
+        var pageSize = params.indexOf(queryParams.pageSize) > -1 ? parseInt(q[queryParams.pageSize]) : defaults.pageSize;
 
+        var fullPages = Math.ceil(totalResults/pageSize);
         if (fullPages >= 1) {
-            var offset = pageSize * (requestedPage - 1);
+            var offset = pageSize * (reqPage - 1);
             var result = json.slice(offset, offset + pageSize);
 
             res.writeHead(200, {'Content-Type': 'application/json'});
@@ -66,4 +70,4 @@ var server = http.createServer(function (req, res) {
         res.writeHead(200, {'Content-Type': 'text/html'});
         res.end(req.url + " isn't a json file :(");
     }
-}).listen(3000);
+}).listen(port);
