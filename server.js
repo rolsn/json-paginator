@@ -19,7 +19,7 @@ console.log("starting server...");
 
 var server = http.createServer(function (req, res) {
     var q = url.parse(req.url, true).query;
-    var fileRequest = req.url.match(/\/(.*\.json)/);
+    var fileRequest = req.url.match(/\/(.*\.json)(?:$|\?)/);
 
     console.log("request: url %s", req.url);
 
