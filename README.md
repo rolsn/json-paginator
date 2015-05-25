@@ -2,10 +2,11 @@
 
 ## Purpose
 This is a simple node.js application whose purpose is to serve JSON files like any normal web server would.
-The difference is it will also paginate the JSON into any combination of page # or count size.
+The difference is it will also paginate the JSON into any combination of page # or count size. It has no
+extra dependencies.
 
 ## Use
-$ cd dir; nodejs server.js
+$nodejs server.js
 
 By default, any .json files within the current directory will be served. The entire JSON file will
 be returned if there are no URL parameters; if 'page' or 'count' are detected, the results will be
