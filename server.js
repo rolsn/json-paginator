@@ -55,10 +55,22 @@ var server = http.createServer(function (req, res) {
         var fullPages = Math.ceil(totalResults/pageSize);
         if (fullPages >= 1) {
             var offset = pageSize * (reqPage - 1);
-            var result = json.slice(offset, offset + pageSize);
+            var paginatedResult = json.slice(offset, offset + pageSize);
+
+            var tmp = {
+                total: totalResults,
+                next: null,
+                prev: null,
+                results: []
+            };
+            for (var i = 0; i < paginatedResult.length; i++) {
+                tmp.results.push(paginatedResult[i]);
+            };
+
+            var results = JSON.stringify(tmp, null, 4);
 
             res.writeHead(200, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify(result));
+            res.end(results);
             return
         }
 
